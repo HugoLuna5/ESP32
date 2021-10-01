@@ -225,16 +225,23 @@ void setup() {
   pinMode(actionDisplay, INPUT);
   pinMode(actionConfig, INPUT);
   pinMode(actionReset, INPUT);
-  powerOnDisplay();
+  powerOnDisplay(0);
   
 
 }
 
 void loop() {
   unsigned long currentMillis = millis();
+
+  // Pobranie pomiarow surowych
+    Vector raw = compass.readRaw();
+   
+    // Pobranie pomiarow znormalizowanych
+    Vector norm = compass.readNormalize();
+  
    if(digitalRead(actionDisplay) == 0){
     auxDisplay = true;
-    powerOnDisplay();
+    powerOnDisplay(norm.ZAxis);
    }
 
    if(digitalRead(actionConfig) == 0){
@@ -243,36 +250,16 @@ void loop() {
       delay(200);
    }
 
-
-   // Pobranie pomiarow surowych
-    Vector raw = compass.readRaw();
-   
-    // Pobranie pomiarow znormalizowanych
-    Vector norm = compass.readNormalize();
-   
-    // Wyswielnie wynikow
-     
-    //Serial.print(" Xraw = ");
-    //Serial.print(raw.XAxis);
-   // Serial.print(" Yraw = ");
-    //Serial.print(raw.YAxis);
-    Serial.print(" Zraw = ");
-    Serial.print(raw.ZAxis);
-    //Serial.print(" Xnorm = ");
-    //Serial.print(norm.XAxis);
-    //Serial.print(" Ynorm = ");
-    //Serial.print(norm.YAxis);
-    Serial.print(" ZNorm = ");
-    Serial.print(norm.ZAxis);
-    Serial.println();
-    
    
 
    if (millis() - lastMillis >= 2*60*1000UL) 
     {
      lastMillis = millis();  //get ready for the next iteration
       //Serial.println("Enviar datos al servidor");
-      //sendDataToServer();
+
+      if (WiFi.status() == WL_CONNECTED){
+        sendDataToServer((int)norm.ZAxis);
+      }
     }
 
 
@@ -293,173 +280,173 @@ void loop() {
    } 
   }
 
-  void sendDataToServer(){
+  void sendDataToServer(int valueZ){
     if (Serial.available() > 0) {
-      getTempViaServer();
+      getTempViaServer(valueZ);
     }
  
   }
 
 
-  String getValueCylinderlStationary(int valueProgress){
+  String getValue(int valueProgress){
 
       if (valueProgress >= 1) {
             if (valueProgress == 97) {//0.5%
-                return "0 %";
+                return "0 ";
             } else if (valueProgress == 96) {
-                return "0 %";
+                return "0 ";
             } else if (valueProgress == 95) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 94) {
-                return "0 %";
+                return "0 ";
             } else if (valueProgress == 93) {
-                return "0 %";
+                return "0 ";
             } else if (valueProgress == 92) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 91) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 90) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 89) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 88) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 87) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 86) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 85) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 84) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 83) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 82) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 81) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 80) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 79) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 78) {
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 77) {//0 valor sensor
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 76) {//10%
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 75) {//10%
-                 return "0 %";
+                 return "0 ";
             } else if (valueProgress == 74) {//10%
-                 return "1 %";
+                 return "1 ";
             } else if (valueProgress == 73) {//10%
-                 return "1 %";
+                 return "1 ";
             } else if (valueProgress == 72) {//10%
-                 return "1 %";
+                 return "1 ";
             } else if (valueProgress == 71) {//10%
-                 return "1 %";
+                 return "1 ";
             } else if (valueProgress == 70) {//10%
-                return "2 %";
+                return "2 ";
             } else if (valueProgress == 69) {//10%
-                return "2 %";
+                return "2 ";
             } else if (valueProgress == 68) {//10%
-                return "2 %";
+                return "2 ";
             } else if (valueProgress == 67) {//10%
-                return "2 %";
+                return "2 ";
             } else if (valueProgress == 66) {//10%
-                return "3 %";
+                return "3 ";
             } else if (valueProgress == 65) {//10%
-                return "3 %";
+                return "3 ";
             } else if (valueProgress == 64) {//10%
-                return "3 %";
+                return "3 ";
             } else if (valueProgress == 63) {//10%
-                return "3 %";
+                return "3 ";
             } else if (valueProgress == 62) {//10%
-                return "4 %";
+                return "4 ";
             } else if (valueProgress == 61) {//10%
-                return "4 %";
+                return "4 ";
             } else if (valueProgress == 60) {//10%
-                return "4 %";
+                return "4 ";
             } else if (valueProgress == 59) {//10%
-                return "4 %";
+                return "4 ";
             } else if (valueProgress == 58) {//5% valor de sensor ////////////////////////////
-                return "5 %";
+                return "5 ";
             } else if (valueProgress == 57) {//10%
-                return "5 %";
+                return "5 ";
             } else if (valueProgress == 56) {//10%
-                return "5 %";
+                return "5 ";
             } else if (valueProgress == 55) {//10%
-                return "5 %";
+                return "5 ";
             } else if (valueProgress == 54) {//10%
-                return "5 %";
+                return "5 ";
             } else if (valueProgress == 53) {//10%
-                return "5 %";
+                return "5 ";
             } else if (valueProgress == 52) {//10%
-                return "5 %";
+                return "5 ";
             } else if (valueProgress == 51) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 50) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 49) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 48) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 47) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 46) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 45) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 44) {//10%
-                return "6 %";
+                return "6 ";
             } else if (valueProgress == 43) {//10%
-                return "7 %";
+                return "7 ";
             } else if (valueProgress == 42) {//10%
-                return "7 %";
+                return "7 ";
             } else if (valueProgress == 41) {//10%
-                return "7 %";
+                return "7 ";
             } else if (valueProgress == 40) {//10%
-                return "7 %";
+                return "7 ";
             } else if (valueProgress == 39) {//10%
-                return "7 %";
+                return "7 ";
             } else if (valueProgress == 38) {//10%
-                return "7 %";
+                return "7 ";
             } else if (valueProgress == 37) {//10%
-                return "8 %";
+                return "8 ";
             } else if (valueProgress == 36) {//10%
-                return "8 %";
+                return "8 ";
             } else if (valueProgress == 35) {//10%
-                return "8 %";
+                return "8 ";
             } else if (valueProgress == 34) {//10%
-                return "8 %";
+                return "8 ";
             } else if (valueProgress == 33) {//10%
-                return "8 %";
+                return "8 ";
             } else if (valueProgress == 32) {//10%
-                return "8 %";
+                return "8 ";
             } else if (valueProgress == 31) {//10%
-                return "8 %";
+                return "8 ";
             } else if (valueProgress == 30) {//10%
-                return "9 %";
+                return "9 ";
             } else if (valueProgress == 29) {//10%
-                return "9 %";
+                return "9 ";
             } else if (valueProgress == 28) {//10%
-                return "9 %";
+                return "9 ";
             } else if (valueProgress == 27) {//10%
-                return "9 %";
+                return "9 ";
             } else if (valueProgress == 26) {//10%
-                return "9 %";
+                return "9 ";
             } else if (valueProgress == 25) {//10% valor sensor/////////////
-                return "10 %";
+                return "10 ";
             } else if (valueProgress == 24) {//10%
-                return "10 %";
+                return "10 ";
             } else if (valueProgress == 23) {//10%
-                return "10 %";
+                return "10 ";
             } else if (valueProgress == 22) {//10%
-                return "10 %";
+                return "10 ";
             } else if (valueProgress == 21) {//10%
-                return "11 %";
+                return "11 ";
             } else if (valueProgress == 20) {//10%
-                return "11 %";
+                return "11 ";
             } else if (valueProgress == 19) {//10%
                 return "11 %";
             } else if (valueProgress == 18) {//10%
@@ -1034,45 +1021,13 @@ void loop() {
 }
 
 
-String getValueCylinder(int valueProgress){
-
-     if (valueProgress <= 354 && valueProgress <= 355) {
-            return "0 ";
-        }else if (valueProgress >= 356 && valueProgress <= 357){
-            return "5 ";
-        }else if (valueProgress >= 358 && valueProgress <= 359){
-            return "10 ";
-        }else if (valueProgress >= 360 && valueProgress <= 361){
-            return "20 ";
-        }else if(valueProgress >= 362 && valueProgress <= 364){
-            return "30 ";
-        }else if(valueProgress >= 365 && valueProgress <= 368){
-            return "40 ";
-        }else if(valueProgress >= 369 && valueProgress <= 371){
-            return "50 ";
-        }else if(valueProgress >= 372 && valueProgress <= 373){
-            return "60 ";
-        }else if(valueProgress >= 374 && valueProgress <= 375){
-            return "70 ";
-        }else if(valueProgress >= 376 && valueProgress <= 378){
-            return "80 ";
-        }else if(valueProgress >= 379 && valueProgress <= 381){
-            return "90 ";
-        }else if(valueProgress >= 382 && valueProgress <= 384){
-            return "100 ";
-        }else if(valueProgress >386){
-            return "*SP* ";
-        }else{
-            return "*SP*";
-        }
-  
-}
 
 
-  String getTempViaServer(){
+
+  String getTempViaServer(int valueZ){
    
-    String val = Serial.readString(); 
-    String part01 = getValue(val,':',0);
+    //String val = Serial.readString(); 
+    //String part01 = getValue(val,':',0);
     
     clientTemp.setInsecure(); //the magic line, use with caution
     clientTemp.connect(urlRequest, 443);
@@ -1080,7 +1035,7 @@ String getValueCylinder(int valueProgress){
 
     
     httpClientTemp.addHeader("Content-Type", "application/json");
-     int httpResponseCode = httpClientTemp.POST("{\"device_uuid\":\""+device_uuid+"\",\"contentDevice\":\""+part01+"\"}");
+     int httpResponseCode = httpClientTemp.POST("{\"device_uuid\":\""+device_uuid+"\",\"contentDevice\":\""+valueZ+"\"}");
     String payload = "0";
      //httpClientTemp.writeToStream(&Serial);
     if  (httpResponseCode > 0){
@@ -1100,7 +1055,7 @@ String getValueCylinder(int valueProgress){
 /**    
  *Mostrar     
  */
-void  displayTemp () {
+void  displayTemp (int valueZ) {
    
    //val = analogRead (magPin);      // salida del sensor al pin A0 analógico arduino
    //int magValue = val;//analogRead(magPin);
@@ -1111,7 +1066,7 @@ void  displayTemp () {
     display.setTextColor (WHITE);
     display.setTextSize ( 2 );
     display.setCursor (  0, 0 );
-    display.print(getTempViaServer()); //Llamar al api del clima getTempViaServer()
+    display.print(getTempViaServer(valueZ)); //Llamar al api del clima getTempViaServer()
     display.setTextSize ( 2 );
   
     display.setCursor (  62, 0 );
@@ -1142,7 +1097,7 @@ void  displayTemp () {
        Serial.println(part01);
        Serial.println("");
    
-       display.print(getValueCylinder(part01.toInt()));
+       display.print(getValue(valueZ));
    }
     display.setTextSize ( 2 );
     display.setCursor (  90, 35 );
@@ -1239,16 +1194,16 @@ void drawPointBatery(){
    * y mostrar la información recolectada
    * 
    */
-  void powerOnDisplay(){
+  void powerOnDisplay(int value){
 
     if(auxDisplay){//encender pantalla y mostrar datos
       display.ssd1306_command(SSD1306_DISPLAYON);
       auxDisplay = false;
       //digitalWrite(actionActivateDevice, HIGH);
-      displayTemp();
+      displayTemp(value);
       //delay(15000);
       delay(7000);
-      powerOnDisplay();
+      powerOnDisplay(value);
      }else{//Apagar
       display.ssd1306_command(SSD1306_DISPLAYOFF);
      }
